@@ -59,7 +59,7 @@ You have several options.
 For static linking of HD2PC
 - copy `hd2pc.h` and `hd2pc.c` to your project and add them in your favourite IDE
 
-For dynamic linking of HD2pC:
+For dynamic linking of HD2PC:
 - place `hd2pc.h` where compiler can find it (e.g. `make install` for `/usr/local/include/hd2pc.h`)
 - place `libhd2pc.so` where linker can find it (e.g. `make install` for `/usr/local/lib/libhd2pc.so`)
 - make sure `/usr/local/...` is considered for libraries
