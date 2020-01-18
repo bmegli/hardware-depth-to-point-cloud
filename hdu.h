@@ -1,5 +1,5 @@
 /*
- * HD2PC - Hardware Depth to Point Cloud C library
+ * HDU - Hardware Depth Unprojector C library
  *
  * Copyright 2020 (C) Bartosz Meglicki <meglickib@gmail.com>
  *
@@ -12,18 +12,18 @@
 /**
  ******************************************************************************
  *
- *  \mainpage HD2PC documentation
- *  \see https://github.com/bmegli/hardware-depth-to-point-cloud
+ *  \mainpage hdu documentation
+ *  \see https://github.com/bmegli/hardware-depth-unprojector
  *
  *  \copyright  Copyright (C) 2020 Bartosz Meglicki
- *  \file       hd2pc.h
+ *  \file       hdu.h
  *  \brief      Library public interface header
  *
  ******************************************************************************
  */
 
-#ifndef HD2PC_H
-#define HD2PC_H
+#ifndef HDU_H
+#define HDU_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,9 +35,9 @@ extern "C" {
  *  @{
  */
 
-struct hd2pc;
+struct hdu;
 
-struct hd2pc_depth
+struct hdu_depth
 {
 	uint16_t *data;
 	int width;
@@ -47,7 +47,7 @@ struct hd2pc_depth
 
 typedef float float3[3];
 
-struct hd2pc_point_cloud
+struct hdu_point_cloud
 {
 	float3 *data;
 	int size;
@@ -56,10 +56,10 @@ struct hd2pc_point_cloud
 
 
 //NULL on ERROR
-struct hd2pc *hd2pc_init(float ppx, float ppy, float fx, float fy, float depth_unit);
-void hd2pc_close(struct hd2pc *h);
+struct hdu *hdu_init(float ppx, float ppy, float fx, float fy, float depth_unit);
+void hdu_close(struct hdu *h);
 
-void hd2pc_unproject(const struct hd2pc *h, const struct hd2pc_depth *depth, struct hd2pc_point_cloud *pc);
+void hdu_unproject(const struct hdu *h, const struct hdu_depth *depth, struct hdu_point_cloud *pc);
 
 /** @}*/
 

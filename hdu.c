@@ -1,5 +1,5 @@
 /*
- * HD2PC - Hardware Depth to Point Cloud C library implementation
+ * HDU - Hardware Depth Unprojector C library implementation
  *
  * Copyright 2020 (C) Bartosz Meglicki <meglickib@gmail.com>
  *
@@ -9,12 +9,12 @@
  *
  */
 
-#include "hd2pc.h"
+#include "hdu.h"
 
 #include <stdio.h> //fprintf
 #include <stdlib.h> //malloc
 
-struct hd2pc
+struct hdu
 {
 	float ppx;
 	float ppy;
@@ -23,13 +23,13 @@ struct hd2pc
 	float depth_unit;
 };
 
-struct hd2pc *hd2pc_init(float ppx, float ppy, float fx, float fy, float depth_unit)
+struct hdu *hdu_init(float ppx, float ppy, float fx, float fy, float depth_unit)
 {
-	struct hd2pc *h;
+	struct hdu *h;
 
-	if( ( h = (struct hd2pc*)malloc(sizeof(struct hd2pc))) == NULL )
+	if( ( h = (struct hdu*)malloc(sizeof(struct hdu))) == NULL )
 	{
-		fprintf(stderr, "hd2pc: not enough memory for hd2pc\n");
+		fprintf(stderr, "hdu: not enough memory for hdu\n");
 		//errno = ENOMEM;
 		return NULL;
 	}
@@ -43,7 +43,7 @@ struct hd2pc *hd2pc_init(float ppx, float ppy, float fx, float fy, float depth_u
 	return h;
 }
 
-void hd2pc_close(struct hd2pc *h)
+void hdu_close(struct hdu *h)
 {
 	if(h == NULL)
 		return;
@@ -51,9 +51,8 @@ void hd2pc_close(struct hd2pc *h)
 	free(h);
 }
 
-void hd2pc_unproject(const struct hd2pc *h, const struct hd2pc_depth *depth, struct hd2pc_point_cloud *pc)
+void hdu_unproject(const struct hdu *h, const struct hdu_depth *depth, struct hdu_point_cloud *pc)
 {
-	//possibly handle clamp value specially
 	int points=0;
 	float d;
 
@@ -67,7 +66,7 @@ void hd2pc_unproject(const struct hd2pc *h, const struct hd2pc_depth *depth, str
 				continue;
 
 			pc->data[points][0] = d * (c - h->ppx) / h->fx;
-			pc->data[points][1] = d * (r - h->ppy) / h->fy;
+			pc->data[points][1] = -d * (r - h->ppy) / h->fy;
 			pc->data[points][2] = d;
 
 			++points;

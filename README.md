@@ -1,6 +1,7 @@
-# HD2PC - Hardware Depth to Point Cloud C library
+# HDU - Hardware Depth Unprojector C library
 
-Placeholder for future library with rough software implementation.
+Placeholder for future library.
+Currently simple software implementation.
 
 Work in early progress. Not usable yet.
 
@@ -36,10 +37,10 @@ sudo apt-get install libcurl4 cmake
 # get git
 sudo apt-get install git
 # clone the repository
-git clone https://github.com/bmegli/hardware-depth-to-point-cloud.git
+git clone https://github.com/bmegli/hardware-depth-unprojector.git
 
 # finally build the library and examples
-cd hardware-depth-to-point-cloud
+cd hardware-depth-unprojector
 mkdir build
 cd build
 cmake ..
@@ -57,27 +58,27 @@ You have several options.
 ### IDE (recommended)
 
 For static linking of HD2PC
-- copy `hd2pc.h` and `hd2pc.c` to your project and add them in your favourite IDE
+- copy `hdu.h` and `hdu.c` to your project and add them in your favourite IDE
 
 For dynamic linking of HD2PC:
-- place `hd2pc.h` where compiler can find it (e.g. `make install` for `/usr/local/include/hd2pc.h`)
-- place `libhd2pc.so` where linker can find it (e.g. `make install` for `/usr/local/lib/libhd2pc.so`)
+- place `hdu.h` where compiler can find it (e.g. `make install` for `/usr/local/include/hdu.h`)
+- place `libhdu.so` where linker can find it (e.g. `make install` for `/usr/local/lib/libhdu.so`)
 - make sure `/usr/local/...` is considered for libraries
-- add `hd2pc` to linked libraries in IDE project configuration
-- make sure `libhd2pc.so` is reachable to you program at runtime (e.g. set `LD_LIBRARIES_PATH`)
+- add `hdu` to linked libraries in IDE project configuration
+- make sure `libhdu.so` is reachable to you program at runtime (e.g. set `LD_LIBRARIES_PATH`)
 
 ### CMake
 
-Assuming directory structure with HD2PC as `hardware-depth-to-point-cloud` subdirectory (or git submodule) of your project.
+Assuming directory structure with HDU as `hardware-depth-unprojector` subdirectory (or git submodule) of your project.
 
 ```
 your-project
 │   main.cpp
 │   CMakeLists.txt
 │
-└───hardware-depth-to-point-cloud
-│   │   hd2pc.h
-│   │   hd2pc.c
+└───hardware-depth-unprojector
+│   │   hdu.h
+│   │   hdu.c
 │   │   CMakeLists.txt
 ```
 
@@ -90,28 +91,28 @@ project(
     your-project
 )
 
-# drop the SHARED if you would rather link with HVE statically
-add_library(hd2pc SHARED hardware-depth-to-point-cloud/hd2pc.c)
+# drop the SHARED if you would rather link with HDU statically
+add_library(hdu SHARED hardware-depth-unprojector/hdu.c)
 
 add_executable(your-project main.cpp)
-target_include_directories(your-project PRIVATE hardware-depth-to-point-cloud)
-target_link_libraries(your-project hd2pc)
+target_include_directories(your-project PRIVATE hardware-depth-unprojector)
+target_link_libraries(your-project hdu)
 ```
 
 ### Manually
 
-Assuming your `main.c`/`main.cpp` and `hd2pc.h`, `hd2pc.c` are all in the same directory:
+Assuming your `main.c`/`main.cpp` and `hdu.h`, `hdu.c` are all in the same directory:
 
 C
 ```bash
-gcc main.c hd2pc.c -o your-program
+gcc main.c hdu.c -o your-program
 ```
 
 C++
 ```bash
-gcc -c hd2pc.c
+gcc -c hdu.c
 g++ -c main.cpp
-g++ hd2pc.o main.o -o your-program
+g++ hdu.o main.o -o your-program
 ```
 
 ## License
