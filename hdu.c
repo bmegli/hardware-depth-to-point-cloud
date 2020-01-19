@@ -53,15 +53,13 @@ void hdu_close(struct hdu *h)
 
 void hdu_unproject(const struct hdu *h, const struct hdu_depth *depth, struct hdu_point_cloud *pc)
 {
+	const int pc_size = pc->size;
 	int points=0;
 	float d;
 
 	for(int r=0;r<depth->height;++r)
-		for(int c=0;c<depth->width;++c)
+		for(int c=0;c<depth->width && points < pc_size;++c)
 		{
-			if(points == pc->size)
-				break;
-
 			if( (d = depth->data[r * depth->stride / 2 + c] * h->depth_unit) == 0 )
 				continue;
 
