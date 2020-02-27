@@ -67,7 +67,7 @@ void hdu_unproject(const struct hdu *h, const struct hdu_depth *depth, struct hd
 			pc->data[points][1] = -d * (r - h->ppy) / h->fy;
 			pc->data[points][2] = d;
 
-			pc->colors[points] = depth->colors[r/2 * depth->stride + (r % 2 + 1) * c + 1 - c % 2];
+			pc->colors[points] = depth->colors[r/2 * depth->stride + (r % 2) * depth->width  + c + 1 - c % 2];
 
 			++points;
 		}
