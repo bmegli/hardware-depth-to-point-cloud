@@ -40,16 +40,19 @@ struct hdu;
 struct hdu_depth
 {
 	uint16_t *data;
+	uint8_t *colors;
 	int width;
 	int height;
 	int stride;
 };
 
 typedef float float3[3];
+typedef uint32_t color32;
 
 struct hdu_point_cloud
 {
 	float3 *data;
+	color32 *colors;
 	int size;
 	int used;
 };
