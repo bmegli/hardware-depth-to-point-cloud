@@ -3,7 +3,7 @@
 Placeholder for future library.
 Currently simple software implementation.
 
-Work in early progress. Not usable yet.
+Work in early progress.
 
 See [hardware-video-streaming](https://github.com/bmegli/hardware-video-streaming) for other related projects.
 
@@ -13,9 +13,11 @@ See [hardware-video-streaming](https://github.com/bmegli/hardware-video-streamin
 - unprojection of depth maps to point clouds
 - with formats natively compatible with
      - HEVC Main10 Y plane
-     - Unity Mesh NativeBuffer interface
+     - Unity Mesh float3 NativeBuffer interface
+     - HEVC Main10 UV plane (greyscale colors)
+     - Unity Mesh color32 NativeBuffer interface
 
-This means that we natively wrap HEVC Main10 data and output native compatible Unity vertices data. 
+This means that we natively wrap HEVC Main10 data and output native compatible Unity vertices/colors data. 
 
 ## Platforms 
 
@@ -57,7 +59,7 @@ You have several options.
 
 ### IDE (recommended)
 
-For static linking of HD2PC
+For static linking of HDU
 - copy `hdu.h` and `hdu.c` to your project and add them in your favourite IDE
 
 For dynamic linking of HD2PC:
