@@ -57,9 +57,14 @@ void hdu_unproject(const struct hdu *h, const struct hdu_depth *depth, struct hd
 	int points=0;
 	float d;
 	const float max_d = 0.19f;
+	const int min_x = 50;
+	const int max_x = depth->width - 50;
+	const int min_y = 20;
+	const int max_y = depth->height - 20;
 
-	for(int r=0;r<depth->height;++r)
-		for(int c=0;c<depth->width && points < pc_size;++c)
+
+	for(int r=min_y;r<max_y;++r)
+		for(int c=min_x;c<max_x && points < pc_size;++c)
 		{
 			if( (d = depth->data[r * depth->stride / 2 + c] * h->depth_unit) < max_d )
 				continue;
