@@ -40,10 +40,11 @@ struct hdu;
 struct hdu_depth
 {
 	uint16_t *data;
-	uint8_t *colors;
+	uint32_t *colors;
 	int width;
 	int height;
-	int stride;
+	int depth_stride;
+	int color_stride;
 };
 
 typedef float float3[3];

@@ -60,16 +60,15 @@ void hdu_unproject(const struct hdu *h, const struct hdu_depth *depth, struct hd
 	for(int r=0;r<depth->height;++r)
 		for(int c=0;c<depth->width && points < pc_size;++c)
 		{
-			if( (d = depth->data[r * depth->stride / 2 + c] * h->depth_unit) == 0 )
+			if( (d = depth->data[r * depth->depth_stride / 2 + c] * h->depth_unit) == 0 )
 				continue;
 
 			pc->data[points][0] = d * (c - h->ppx) / h->fx;
 			pc->data[points][1] = -d * (r - h->ppy) / h->fy;
 			pc->data[points][2] = d;
 
-			//for explanation see:
-			//https://github.com/bmegli/unity-network-hardware-video-decoder/issues/11#issuecomment-591970124
-			pc->colors[points] = depth->colors[r/2 * depth->stride + (r % 2) * depth->width  + c + 1 - c % 2];
+			//add some sanity, just for test
+			pc->colors[points] = depth->colors[r*depth->color_stride/4 + c];
 
 			++points;
 		}
