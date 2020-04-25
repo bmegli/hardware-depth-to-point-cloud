@@ -54,22 +54,22 @@ void hdu_close(struct hdu *h)
 void hdu_unproject(const struct hdu *h, const struct hdu_depth *depth, struct hdu_point_cloud *pc)
 {
 	const int pc_size = pc->size;
+	const color32 default_color = 0xFFFFFFFF;
 	int points=0;
 	float d;
 
 	for(int r=0;r<depth->height;++r)
 		for(int c=0;c<depth->width && points < pc_size;++c)
 		{
-			if( (d = depth->data[r * depth->stride / 2 + c] * h->depth_unit) == 0 )
+			if( (d = depth->data[r * depth->depth_stride / 2 + c] * h->depth_unit) == 0 )
 				continue;
 
 			pc->data[points][0] = d * (c - h->ppx) / h->fx;
 			pc->data[points][1] = -d * (r - h->ppy) / h->fy;
 			pc->data[points][2] = d;
 
-			//for explanation see:
-			//https://github.com/bmegli/unity-network-hardware-video-decoder/issues/11#issuecomment-591970124
-			pc->colors[points] = depth->colors[r/2 * depth->stride + (r % 2) * depth->width  + c + 1 - c % 2];
+			const uint32_t *color_line = (uint32_t*)(((uint8_t*)depth->colors) + r * depth->color_stride);
+			pc->colors[points] = depth->colors ? color_line[c] : default_color;
 
 			++points;
 		}
