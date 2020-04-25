@@ -37,16 +37,16 @@ int main(int argc, char **argv)
 	//dummy depth map data (middle value)
 	uint16_t v = UINT16_MAX/2;
 	//dummy color value (middle value)
-	uint16_t c = P010LE_MAX/2;
+	uint32_t c = UINT32_MAX/2;
 
 	uint16_t depth_data[4] = {v, v, v, v};
 
 	//only every second horizontal color (greyscale) value is encoded, see
 	//https://github.com/bmegli/unity-network-hardware-video-decoder/issues/11#issuecomment-591970124
-	uint16_t color_data[2] = {c, c};
+	uint32_t color_data[4] = {c, c, c, c};
 
-	//pass here pointer to your real data and its size, stride
-	struct hdu_depth depth = {depth_data, (uint8_t*)color_data, 2, 2, 2*2};
+	//pass here pointer to your real data and its size, strides
+	struct hdu_depth depth = {depth_data, color_data, 2, 2, 2*2, 2*4};
 
 	//placeholder for output point cloud data
 	float3 point_data[4];

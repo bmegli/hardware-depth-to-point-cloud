@@ -54,6 +54,7 @@ void hdu_close(struct hdu *h)
 void hdu_unproject(const struct hdu *h, const struct hdu_depth *depth, struct hdu_point_cloud *pc)
 {
 	const int pc_size = pc->size;
+	const color32 default_color = 0xFFFFFFFF;
 	int points=0;
 	float d;
 
@@ -67,8 +68,8 @@ void hdu_unproject(const struct hdu *h, const struct hdu_depth *depth, struct hd
 			pc->data[points][1] = -d * (r - h->ppy) / h->fy;
 			pc->data[points][2] = d;
 
-			//add some sanity, just for test
-			pc->colors[points] = depth->colors[r*depth->color_stride/4 + c];
+			const uint32_t *color_line = (uint32_t*)(((uint8_t*)depth->colors) + r * depth->color_stride);
+			pc->colors[points] = depth->colors ? color_line[c] : default_color;
 
 			++points;
 		}

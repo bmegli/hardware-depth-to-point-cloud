@@ -12,12 +12,12 @@ See [hardware-video-streaming](https://github.com/bmegli/hardware-video-streamin
 - hardware accelerated
 - unprojection of depth maps to point clouds
 - with formats natively compatible with
-     - HEVC Main10 Y plane
+     - HEVC Main10 p010le Y plane
      - Unity Mesh float3 NativeBuffer interface
-     - HEVC Main10 UV plane (greyscale colors)
+     - rgb0/rgba color pixel format
      - Unity Mesh color32 NativeBuffer interface
 
-This means that we natively wrap HEVC Main10 data and output native compatible Unity vertices/colors data. 
+This means that we natively wrap HEVC Main10 and rgb0/rgba data and output native compatible Unity vertices/colors data. 
 
 ## Platforms 
 
