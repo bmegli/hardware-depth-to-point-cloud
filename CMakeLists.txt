@@ -4,7 +4,7 @@ project(
     hdu
 )
 
-add_library(hdu SHARED hdu.c)
+add_library(hdu hdu.c)
 install(TARGETS hdu DESTINATION lib)
 install(FILES hdu DESTINATION include)
 
