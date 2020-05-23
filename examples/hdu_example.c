@@ -25,10 +25,10 @@ void print_point_cloud(const struct hdu_point_cloud *pc);
 
 int main(int argc, char **argv)
 {
-
 	struct hdu *h;
+	struct hdu_config cfg = {PPX, PPY, FX, FY, DEPTH_UNIT};
 
-	if( (h = hdu_init(PPX, PPY, FX, FY, DEPTH_UNIT)) == NULL )
+	if( (h = hdu_init(&cfg)) == NULL )
 	{
 		fprintf(stderr, "failed to initizlize hdu\n");
 		return 1;

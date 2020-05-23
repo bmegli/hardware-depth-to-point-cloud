@@ -14,6 +14,9 @@
 #include <stdio.h> //fprintf
 #include <stdlib.h> //malloc
 
+//in binary 10 ones followed by 6 zeroes
+static const uint16_t P010LE_MAX = 0xFFC0;
+
 struct hdu
 {
 	float ppx;
@@ -21,9 +24,11 @@ struct hdu
 	float fx;
 	float fy;
 	float depth_unit;
+	float min_depth;
+	float max_depth;
 };
 
-struct hdu *hdu_init(float ppx, float ppy, float fx, float fy, float depth_unit)
+struct hdu *hdu_init(const struct hdu_config *c)
 {
 	struct hdu *h;
 
@@ -34,11 +39,13 @@ struct hdu *hdu_init(float ppx, float ppy, float fx, float fy, float depth_unit)
 		return NULL;
 	}
 
-	h->ppx = ppx;
-	h->ppy = ppy;
-	h->fx = fx;
-	h->fy = fy;
-	h->depth_unit = depth_unit;
+	h->ppx = c->ppx;
+	h->ppy = c->ppy;
+	h->fx = c->fx;
+	h->fy = c->fy;
+	h->depth_unit = c->depth_unit;
+	h->min_depth = c->min_margin;
+	h->max_depth = P010LE_MAX * c->depth_unit - c->max_margin;
 
 	return h;
 }
@@ -61,7 +68,8 @@ void hdu_unproject(const struct hdu *h, const struct hdu_depth *depth, struct hd
 	for(int r=0;r<depth->height;++r)
 		for(int c=0;c<depth->width && points < pc_size;++c)
 		{
-			if( (d = depth->data[r * depth->depth_stride / 2 + c] * h->depth_unit) == 0 )
+			if( (d = depth->data[r * depth->depth_stride / 2 + c] * h->depth_unit) <= h->min_depth ||
+			     d > h->max_depth)
 				continue;
 
 			pc->data[points][0] = d * (c - h->ppx) / h->fx;

@@ -59,8 +59,31 @@ struct hdu_point_cloud
 };
 
 
+/**
+ * @struct hdu_depth_config
+ * @brief Depth unprojection configuration.
+ *
+ * If non-zero min_margin and max_margin are designed to ignore depth values
+ * - <= min_margin
+ * - > max representable depth - max_margin
+ *
+ * max representable depth is calculated as P010LE_MAX * depth_unit
+ *
+ * @see hdu_init
+ */
+struct hdu_config
+{
+	float ppx; //!< principal point x pixel coordinates (center of projection)
+	float ppy; //!< principal point y pixel coordinates (center of projection)
+	float fx; //!< focal length in pixel width unit
+	float fy; //!< focal length in pixel height unit
+	float depth_unit; //!< multiplier for raw depth data;
+	float min_margin; //!< minimal margin to treat as valid in result unit (raw data * depth_unit);
+	float max_margin; //!< maximal margin to treat as valid in result unit (raw data * depth_unit);
+};
+
 //NULL on ERROR
-struct hdu *hdu_init(float ppx, float ppy, float fx, float fy, float depth_unit);
+struct hdu *hdu_init(const struct hdu_config *cfg);
 void hdu_close(struct hdu *h);
 
 void hdu_unproject(const struct hdu *h, const struct hdu_depth *depth, struct hdu_point_cloud *pc);
