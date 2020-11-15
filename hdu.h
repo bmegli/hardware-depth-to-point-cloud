@@ -37,6 +37,10 @@ extern "C" {
 
 struct hdu;
 
+typedef float float3[3];
+typedef float float4[4];
+typedef uint32_t color32;
+
 struct hdu_depth
 {
 	uint16_t *data;
@@ -45,10 +49,9 @@ struct hdu_depth
 	int height;
 	int depth_stride;
 	int color_stride;
+	const float *position; //!< position vector XYZ from which point cloud was captured
+	const float *rotation; //!< heading quaternion XYZW from which point cloud was captured
 };
-
-typedef float float3[3];
-typedef uint32_t color32;
 
 struct hdu_point_cloud
 {

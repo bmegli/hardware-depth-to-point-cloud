@@ -11,6 +11,8 @@
 
 #include "hdu.h"
 
+#include <Eigen/Geometry>
+
 #include <stdio.h> //fprintf
 #include <stdlib.h> //malloc
 
@@ -27,6 +29,18 @@ struct hdu
 	float min_depth;
 	float max_depth;
 };
+
+using namespace Eigen;
+
+typedef Matrix<uint16_t, Dynamic, Dynamic, RowMajor> DepthMatrix;
+typedef Matrix<float, Dynamic, Dynamic, RowMajor> DepthMatrixFloat;
+//aligned?
+typedef Map<DepthMatrix, Unaligned, Stride<Dynamic, 1>> DepthMap;
+
+typedef Matrix<float, 3, Dynamic, ColMajor> ColumnVectors;
+//aligned?
+typedef Map<ColumnVectors, Aligned> ColumnMap;;
+
 
 struct hdu *hdu_init(const struct hdu_config *c)
 {
@@ -64,6 +78,11 @@ void hdu_unproject(const struct hdu *h, const struct hdu_depth *depth, struct hd
 	const color32 default_color = 0xFFFFFFFF;
 	int points=0;
 	float d;
+	
+//	DepthMap depthMap(depth->data, depth->height, depth->width, Stride<Dynamic,1>(depth->depth_stride/sizeof(uint16_t), 1));
+//	DepthMatrixFloat depthMapf = depthMap.cast<float>() * h->depth_unit;
+	//can be performed in integer arithmetic
+//	DepthMatrixFloat depthMap0 = (depthMapf.array() >= h->min_depth && depthMapf.array() < h->max_depth).cast<float>() * depthMapf.array();
 
 	for(int r=0;r<depth->height;++r)
 		for(int c=0;c<depth->width && points < pc_size;++c)
@@ -83,5 +102,13 @@ void hdu_unproject(const struct hdu *h, const struct hdu_depth *depth, struct hd
 		}
 
 	pc->used = points;
+	
+	ColumnMap V((float*)pc->data, 3, pc->used);
+	Eigen::Matrix3f R = Map<const Quaternionf>(depth->rotation).toRotationMatrix();
+	Vector3f T(depth->position[0], depth->position[1], depth->position[2]);
+	
+	V.applyOnTheLeft(R);
+	V.colwise() += T;
+	
 	return;
 }
