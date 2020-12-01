@@ -1,0 +1,53 @@
+﻿/*
+ * Hardware Depth Unprojector (compute shader)
+ * 
+ * Copyright 2020 (C) Bartosz Meglicki <meglickib@gmail.com>
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * Compute shader for unprojecting depth map and color map to dense point cloud.
+ * The result is stored in AppendStructureBuffer.
+ *
+ * This is Unity flavour HLSL. You may recompile it with Unity for OpenGL, Vulkan etc.
+ */
+
+#pragma kernel UnprojectKernel
+
+#include "UnityCG.cginc"
+
+CBUFFER_START(UnprojectionArgs)
+    float3 UnprojectionMultiplier; //max distance * [1/fx, 1/fy, 1]
+    float PPX; //principal point x pixel coordinates (center of projection)
+    float PPY; //principal point y pixel coordinates (center of projection)
+    float MinDistance; //in [0, 1], min valid distance divided by max distance, 0 accepts any
+    float MaxDistance; //in [0, 1], max valid distance divided by max distance, 1 accepts any
+CBUFFER_END
+
+Texture2D<float> depthTexture; //sampled as red channel, in [0, 1] where 1 corresponds to max distance
+Texture2D<float> colorTexture; //color corresponding to depth sample
+
+struct VertexData
+{
+    float4 position;
+    float4 color;
+};
+
+AppendStructuredBuffer<VertexData> vertices;
+
+[numthreads(8,8,1)]
+void UnprojectKernel (uint3 id : SV_DispatchThreadID)
+{
+    float d = depthTexture.Load(id.xyz);
+    
+    if(d < MinDistance || d > MaxDistance)
+        return;
+
+    float3 unprojection = {id.x - PPX, PPY - id.y, 1};
+    float4 p = float4(d * unprojection * UnprojectionMultiplier, 1);
+    float4 c = colorTexture[id.xy];
+
+    VertexData v = {p, c};
+    vertices.Append(v);
+}

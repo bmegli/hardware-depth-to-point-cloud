@@ -1,31 +1,49 @@
-# HDU - Hardware Depth Unprojector C library
+# HDU - Hardware Depth Unprojector library
 
-Placeholder for future library.
-Currently simple software implementation.
-
-Work in early progress.
+Hardware and software implementation of depth map to point cloud unprojection (with color).
 
 See [hardware-video-streaming](https://github.com/bmegli/hardware-video-streaming) for other related projects.
 
 ## Intent
 
-- hardware accelerated
-- unprojection of depth maps to point clouds
-- with formats natively compatible with
-     - HEVC Main10 p010le Y plane
-     - Unity Mesh float3 NativeBuffer interface
-     - rgb0/rgba color pixel format
-     - Unity Mesh color32 NativeBuffer interface
+Hardware implementation was the end goal.
+
+Software implementation was kept as simple introduction (or fallback).
+
+Software implmementation has formats natively compatible with
+- HEVC Main10 p010le Y plane (array of uint16_t)
+- Unity Mesh float3 NativeBuffer interface
+- rgb0/rgba color pixel format (array of uint32_t)
+- Unity Mesh color32 NativeBuffer interface
 
 This means that we natively wrap HEVC Main10 and rgb0/rgba data and output native compatible Unity vertices/colors data. 
 
-## Platforms 
+## Platforms
+
+Software implementation has no specific requirments.
+
+Hardware implemenenation uses compute shaders.
+
+This should (in theory) work with:
+- Windows and Windows Store, with a DirectX 11 or DirectX 12 graphics API and Shader Model 5.0 GPU
+- macOS and iOS using Metal graphics API
+- Android, Linux and Windows platforms with Vulkan API
+- Modern OpenGL platforms (OpenGL 4.3 on Linux or Windows; OpenGL ES 3.1 on Android). Note that Mac OS X does not support OpenGL 4.3
+- Modern consoles (Sony PS4 and Microsoft Xbox One)
+
+Tested only with OpenGL on Desktop (Linux).
+
+Shaders use Unity flavoured HLSL. You may recompile them with Unity for OpenGL, Vulkan etc.
 
 ## Hardware
 
-## Dependencies
+TODO
 
 ## Building Instructions
+
+Building instructions are only for software implementation.
+
+Hardware implementation (shaders) have to be integrated into your workflow.
 
 Tested on Ubuntu 18.04.
 
@@ -52,6 +70,10 @@ make
 ## Running Example
 
 ## Using
+
+Only relevant to software implementation.
+
+Hardware implementation (shaders) have to be integrated into your workflow.
 
 ## Compiling your code
 
