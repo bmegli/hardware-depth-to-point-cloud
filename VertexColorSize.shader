@@ -40,6 +40,8 @@ Shader "Custom/VertexColorSize"
                 float size : PSIZE;
             };
 
+            float4x4 transform; //typically local to world matrix
+
             StructuredBuffer<VertexData> vertices;
 
             VertexOutput vert(uint vid : SV_VertexID)
@@ -47,7 +49,9 @@ Shader "Custom/VertexColorSize"
                 VertexData vin = vertices[vid];
                 VertexOutput vout;
 
-                vout.position = UnityObjectToClipPos(vin.position);
+                vout.position =  mul(transform, vin.position);
+                vout.position = UnityObjectToClipPos(vout.position);
+
                 vout.color = vin.color;
                 vout.size = 0.25 / vout.position.w;
 
