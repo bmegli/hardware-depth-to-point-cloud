@@ -29,13 +29,13 @@ Shader "Custom/VertexColorSize"
  
             struct VertexData
             {
-                float4 position : SV_Position;
+                float4 position : POSITION;
                 float4 color : COLOR;
             };
 
             struct VertexOutput
             {
-                float4 position : SV_Position;
+                float4 position : SV_POSITION;
                 float4 color : COLOR;
                 float size : PSIZE;
             };
