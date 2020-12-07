@@ -26,7 +26,7 @@ CBUFFER_START(UnprojectionArgs)
 CBUFFER_END
 
 Texture2D<float> depthTexture; //sampled as red channel, in [0, 1] where 1 corresponds to max distance
-Texture2D<float> colorTexture; //color corresponding to depth sample
+Texture2D<float4> colorTexture; //color corresponding to depth sample
 
 struct VertexData
 {
