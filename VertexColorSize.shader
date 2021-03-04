@@ -53,7 +53,7 @@ Shader "Custom/VertexColorSize"
                 vout.position = UnityObjectToClipPos(vout.position);
 
                 vout.color = vin.color;
-                vout.size = 0.25 / vout.position.w;
+                vout.size = 1.0; //disable size computation for now
 
                 return vout;
             }
